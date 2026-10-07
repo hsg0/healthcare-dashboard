@@ -1,0 +1,23 @@
+[project]
+name = "FASTAPI_v1"
+version = "0.1.0"
+description = "Healthcare dashboard API"
+readme = "README.md"
+authors = [
+    { name = "HSG", email = "hsg_001@hotmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "asyncpg>=0.32.0",
+    "email-validator>=2.3.0",
+    "fastapi[standard]>=0.142.2",
+    "pydantic-settings>=2.15.0",
+    "sqlalchemy[asyncio]>=2.1.3",
+]
+
+[tool.uv]
+package = false
+
+[build-system]
+requires = ["uv_build>=0.12.23,<0.13.0"]
+build-backend = "uv_build"

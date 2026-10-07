@@ -1,0 +1,67 @@
+---
+description: Coding rules for the healthcare dashboard
+alwaysApply: true
+---
+
+# Coding rules
+
+Child-readable code, adult-level production safety.
+
+## This project
+
+- Backend is Python and FastAPI. Install and run it only with uv (`uv add`, `uv sync`, `uv run`). Do not use pip or Poetry.
+- Frontend is React and TypeScript. Install and run it only with npm. Do not use yarn or pnpm.
+- Durable patient and note data lives in PostgreSQL.
+- There is no login. Do not add authentication. If login is added later, enforce authentication and authorization in FastAPI. Never rely on the React app as the only check.
+- The patient summary is a template function in the backend. Do not add an LLM, RAG, Socket.IO, Redis, email, or ImageKit unless the product requirements change.
+- The summary is a readable chart summary, not a diagnosis or treatment recommendation. Say that in the UI.
+
+## Simplicity
+
+- Simplicity comes first.
+- Code must be production quality, not throwaway demo code.
+- Prefer readability over cleverness.
+- One file has one clear job.
+- Create as few files as possible. Reuse an existing file, component, or helper before adding one.
+- Do not duplicate behavior that already exists.
+- Do not split simple logic across many files just to look architectural.
+- Keep related logic together when that makes the flow easier to follow.
+- Use FRONTEND/VITE and BACKEND/FASTAPI. Do not reorganize a working layout without a strong reason.
+- Make the smallest correct change. Understand the existing flow before editing it. Work file by file.
+- Add a dependency only when the standard library or an existing dependency cannot do the job cleanly.
+
+## Names and size
+
+- Use clear, fully descriptive names for variables, functions, classes, files, routes, and components.
+- Avoid vague names such as data, thing, temp, x, or stuff when a meaningful name exists.
+- A function does one thing. A component does one thing.
+- Separate responsibilities only when the split makes the code clearer.
+
+## File headers and comments
+
+Every important application file starts with WHAT, WHY, HOW, and IMPORTANT.
+
+- WHAT — what the file does.
+- WHY — why the file exists.
+- HOW — how it works with the rest of the app.
+- IMPORTANT — anything dangerous, security-sensitive, unusual, or easy to break.
+
+Put that header on Python modules under BACKEND/FASTAPI/app, React source under FRONTEND/VITE/src, Dockerfiles, docker-compose.yml, and .env.example. Skip lockfiles and generated files.
+
+Comments explain why something exists when the code already shows what it does. Do not add filler comments. Use short section headings when a file has more than one block of related code.
+
+## Backend is the source of truth
+
+- Important behavior is decided in FastAPI, not in the browser.
+- Never trust client input because the form already validated it. Validate again with Pydantic.
+- Do not commit secrets, database passwords, or tokens. Put them in environment variables. .env.example contains placeholders only.
+- Handle expected errors on purpose. Return consistent errors: 422 for invalid input, 404 for a missing patient or note, and a clear 500 when the database fails. Do not hide failures with a bare except or an empty catch.
+- Log startup failure, seed failure, database failure, and unexpected exceptions. Do not add a separate request-logging middleware.
+- Design each important flow for invalid input, network failure, database failure, and a missing record.
+- This pass has no automated test suite. Still implement those failure responses and check them while building.
+
+## How a feature should read
+
+Follow the path UI, request, route, Pydantic validation, database, response, UI.
+
+The UI shows loading, empty, validation, not-found, and network-error states. It does not show success when the API failed.
