@@ -13,6 +13,7 @@ from sqlalchemy import text
 
 from config.database import DatabaseBase, engine
 from models.patient import seed_patients_if_empty
+from routes.notes import note_router
 from routes.patients import patient_router
 
 logger = logging.getLogger("uvicorn.error")
@@ -58,6 +59,7 @@ def health_check() -> dict[str, str]:
 
 
 app.include_router(patient_router)
+app.include_router(note_router)
 
 
 if __name__ == "__main__":

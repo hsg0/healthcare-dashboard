@@ -111,15 +111,32 @@ Done. Two screens were added with one new file, `FRONTEND/VITE/dashboard/src/Pat
 - Loading, empty, and network-error states are all shown. During an error the table, the page buttons, and the total count are hidden, so a failed request never looks like a result.
 - The detail screen shows "Patient not available" for a missing id and for an id that is not a number.
 
+### Step 7 — Notes and chart summary
+
+Done. Two new backend files, `models/note.py` and `routes/notes.py`. The screens went into the existing `PatientList.jsx`.
+
+| Method and URL | Answers |
+| --- | --- |
+| `GET /patients/{patient_id}/notes` | Every note for that patient, newest first, or 404. |
+| `POST /patients/{patient_id}/notes` | 201 with the saved note, 422 on bad input, or 404. |
+| `DELETE /patients/{patient_id}/notes/{note_id}` | 204 with no body, or 404. |
+| `GET /patients/{patient_id}/summary` | A template chart summary, or 404. |
+
+Notes from building it:
+
+- `notes.patient_id` is a foreign key with `ON DELETE CASCADE`, so deleting a patient deletes that patient's notes. No note is ever left pointing at a patient who is gone.
+- Deleting a note that belongs to a different patient returns 404. One patient's page can never remove another patient's note.
+- `note_text` has no `min_length`. The blank check is a validator instead, so an empty note answers "A note cannot be empty." rather than Pydantic's wording about characters.
+- A note dated more than five minutes ahead is rejected. The five minutes allow for a browser clock running slightly fast.
+- The summary is a plain template in `build_summary_text`. There is no LLM. It reads the stored name, age, blood type, status, conditions, allergies, last visit, and the notes in time order. Seed phrases such as "None known" and "None recorded" are treated as nothing on file.
+- Every summary carries a fixed notice: it is a readable chart summary, not a diagnosis or a treatment recommendation. That notice is shown on the screen.
+- Adding or removing a note bumps a `chartVersion` counter in `PatientDetail`, which makes the summary load again. A failed reload clears the old summary, so a stale summary is never left on screen.
+
+Checked against the live Supabase data, then every test note was deleted. The notes table is empty again and the 20 patients are untouched.
+
 ## Later
 
 These stay "not started" until we reach them. Add notes under each one when we do the work.
-
-### Step 7 — Notes and summary
-
-Not started.
-
-Add create, list, and delete for notes. Add `GET /patients/{id}/summary` as a chart summary template.
 
 ### Step 8 — Add and edit patient form
 

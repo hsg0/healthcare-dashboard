@@ -282,6 +282,112 @@ p {
   font-weight: 600;
 }
 
+/* Chart summary */
+
+.summary-text {
+  margin: 12px 0 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.summary-notice {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fdf6e3;
+  color: #7a5c13;
+  font-size: 12px;
+}
+
+/* Clinical notes */
+
+.note-form {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  margin: 14px 0 18px;
+}
+
+.note-form label {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  font-size: 12px;
+  color: #667085;
+}
+
+.note-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  padding: 10px 12px;
+  border: 1px solid #dfe4dd;
+  border-radius: 10px;
+  font: inherit;
+  color: #1c2430;
+}
+
+.note-form button,
+.note-confirm button {
+  border: 0;
+  border-radius: 10px;
+  padding: 9px 18px;
+  background: #6d8b6a;
+  color: #fff;
+  cursor: pointer;
+}
+
+.note-form button:disabled {
+  background: #b3bcb3;
+  cursor: not-allowed;
+}
+
+.note-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.note-list li {
+  border: 1px solid #eef1ee;
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+
+.note-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: #667085;
+}
+
+.note-list p {
+  margin: 0;
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+
+.note-confirm {
+  display: flex;
+  gap: 8px;
+}
+
+.note-confirm button {
+  padding: 5px 12px;
+  font-size: 12px;
+  background: #b4231f;
+}
+
+.note-confirm button + button {
+  background: #eef1ee;
+  color: #3c4a3c;
+}
+
 .icon-button {
   width: 36px;
   height: 36px;
