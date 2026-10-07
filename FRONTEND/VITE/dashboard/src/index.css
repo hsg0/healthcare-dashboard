@@ -1,0 +1,714 @@
+/* WHAT — Visual styles for the healthcare dashboard.
+   WHY — The screen should match the nursing dashboard layout.
+   HOW — App.jsx uses these class names. Nothing here talks to the API.
+   IMPORTANT — Keep text dark on light cards so the page stays readable. */
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  color: #1c2430;
+  background: #e7ebe6;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+.dashboard-page {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 22px 24px 40px;
+}
+
+.top-bar,
+.title-row,
+.card-heading,
+.recovery-top,
+.flow-legend,
+.assistant-credits {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.user-chip,
+.top-actions,
+.section-nav,
+.facility-line,
+.doctor-list li,
+.appointment-list li {
+  display: flex;
+  align-items: center;
+}
+
+.user-chip {
+  gap: 8px;
+  background: #1f2430;
+  color: #fff;
+  border-radius: 999px;
+  padding: 4px 12px 4px 4px;
+}
+
+.plus-button,
+.icon-button,
+.section-nav-item,
+.text-button,
+.assistant-credits button,
+.assistant-form button {
+  border: 0;
+  cursor: pointer;
+}
+
+.plus-button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #6f8f73;
+  color: #fff;
+  font-size: 18px;
+}
+
+.user-name {
+  font-size: 14px;
+}
+
+.section-nav {
+  background: #fff;
+  border-radius: 999px;
+  padding: 4px;
+  gap: 2px;
+}
+
+.section-nav-item {
+  background: transparent;
+  color: #667085;
+  border-radius: 999px;
+  padding: 8px 14px;
+}
+
+.section-nav-item.is-selected {
+  background: #6d8b6a;
+  color: #fff;
+}
+
+.icon-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  position: relative;
+}
+
+.bell-dot,
+.menu-lines,
+.menu-lines::before,
+.menu-lines::after {
+  display: block;
+  background: #243042;
+}
+
+.bell-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin: 0 auto;
+  box-shadow: 0 0 0 4px #f3d7c8;
+}
+
+.menu-lines {
+  width: 14px;
+  height: 2px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.menu-lines::before,
+.menu-lines::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 14px;
+  height: 2px;
+}
+
+.menu-lines::before {
+  top: -4px;
+}
+
+.menu-lines::after {
+  top: 4px;
+}
+
+.title-row {
+  align-items: flex-end;
+  margin: 28px 0 18px;
+}
+
+h1 {
+  font-size: 34px;
+  letter-spacing: -0.04em;
+}
+
+.title-row p,
+.facility-line,
+.doctor-list small,
+.appointment-list small,
+.stat-card span,
+.shift-card small,
+.progress-label,
+.progress-scale,
+.shift-remaining,
+.flow-legend,
+.assistant-credits {
+  color: #667085;
+  font-size: 13px;
+}
+
+.facility-line {
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.facility-line strong {
+  color: #1c2430;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 0.75fr 1.05fr 0.95fr 0.95fr;
+  grid-template-areas:
+    "overview overview doctors appointments"
+    "recovery shift flow assistant";
+  gap: 16px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(36, 48, 66, 0.04);
+}
+
+.card h2 {
+  font-size: 16px;
+}
+
+.care-overview-card {
+  grid-area: overview;
+}
+
+.doctor-card {
+  grid-area: doctors;
+}
+
+.appointment-card {
+  grid-area: appointments;
+}
+
+.progress-label {
+  margin-top: 18px;
+}
+
+.progress-track {
+  position: relative;
+  height: 8px;
+  margin-top: 16px;
+  border-radius: 999px;
+  background: #e6ebe3;
+}
+
+.progress-fill {
+  width: 75%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #d5e0cf, #6d8b6a);
+}
+
+.progress-marker {
+  position: absolute;
+  left: 75%;
+  top: -22px;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: #6d8b6a;
+}
+
+.progress-marker::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 16px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #6d8b6a;
+  transform: translateX(-50%);
+}
+
+.progress-scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.stat-row,
+.shift-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.stat-card,
+.shift-stats div {
+  background: #f4f7f2;
+  border-radius: 16px;
+  padding: 12px 8px;
+  text-align: center;
+}
+
+.stat-ring {
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 8px;
+  border-radius: 50%;
+  background: conic-gradient(#6d8b6a var(--ring-progress), #e1e8df 0);
+  display: grid;
+  place-items: center;
+}
+
+.stat-ring::after {
+  content: "";
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f4f7f2;
+}
+
+.stat-card strong,
+.shift-stats strong {
+  display: block;
+  margin-top: 4px;
+}
+
+.doctor-list,
+.appointment-list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+}
+
+.doctor-list li,
+.appointment-list li {
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.doctor-list li span,
+.appointment-list li span {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #d9e3d6;
+}
+
+.status-pill {
+  font-style: normal;
+  font-size: 11px;
+  border-radius: 999px;
+  padding: 4px 8px;
+  background: #e7f3e4;
+  color: #3f6b45;
+}
+
+.status-on-leave {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.count-badge {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #eef2ea;
+  font-size: 11px;
+}
+
+.text-button,
+.assistant-credits button {
+  background: transparent;
+  color: #6d8b6a;
+}
+
+.appointment-list time {
+  width: 48px;
+  font-weight: 700;
+}
+
+.recovery-card {
+  grid-area: recovery;
+}
+
+.recovery-top strong {
+  font-size: 32px;
+}
+
+.legend-recovery,
+.legend-target {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+  background: #6d8b6a;
+}
+
+.legend-target {
+  background: #c7b6ef;
+}
+
+.sparkline {
+  width: 100%;
+  height: 70px;
+  margin-top: 8px;
+}
+
+.sparkline path {
+  fill: none;
+  stroke: #8e79c8;
+  stroke-width: 3;
+}
+
+.sparkline circle {
+  fill: #6d8b6a;
+}
+
+.shift-card {
+  grid-area: shift;
+}
+
+.shift-stats {
+  grid-template-columns: 1fr 1fr;
+}
+
+.shift-stats b,
+.shift-remaining {
+  display: block;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.flow-card {
+  grid-area: flow;
+  background: #edf3ea;
+  position: relative;
+}
+
+.donut {
+  width: 150px;
+  height: 150px;
+  margin: 18px auto 0;
+  border-radius: 50%;
+  background: conic-gradient(#6d8b6a 0 72%, #d7c7f3 72% 88%, #e7ebe6 88% 100%);
+  display: grid;
+  place-items: center;
+}
+
+.donut div {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: #edf3ea;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.donut strong {
+  font-size: 28px;
+}
+
+.flow-side-number {
+  position: absolute;
+  right: 28px;
+  top: 92px;
+  color: #8e79c8;
+  font-weight: 700;
+}
+
+.assistant-card {
+  grid-area: assistant;
+  background: linear-gradient(160deg, #8eaa86, #6d8b6a 55%, #5f7d58);
+  color: #fff;
+}
+
+.assistant-card h2,
+.assistant-credits,
+.assistant-credits button {
+  color: #fff;
+}
+
+.assistant-chips {
+  display: flex;
+  gap: 8px;
+  margin: 28px 0 16px;
+}
+
+.assistant-chips span,
+.assistant-form {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+}
+
+.assistant-chips span {
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.assistant-form {
+  display: flex;
+  margin-top: 14px;
+  padding: 4px 4px 4px 14px;
+}
+
+.assistant-form input {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  color: #fff;
+  outline: none;
+}
+
+.assistant-form input::placeholder {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.assistant-form button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #243042;
+  color: #fff;
+}
+
+.revenue-section {
+  margin-top: 28px;
+}
+
+.revenue-title {
+  font-size: 22px;
+}
+
+.revenue-metrics,
+.revenue-charts {
+  display: grid;
+  gap: 16px;
+}
+
+.revenue-metrics {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.revenue-charts {
+  grid-template-columns: 1.3fr 1fr;
+  margin-top: 16px;
+}
+
+.metric-card h3,
+.revenue-charts h3,
+.milestone-card h3 {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.half-gauge {
+  width: 120px;
+  height: 70px;
+  display: block;
+  margin: 8px 0;
+}
+
+.half-gauge path {
+  fill: none;
+  stroke: #e5e7eb;
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+
+.half-gauge path.half-gauge-fill {
+  stroke: #3b82f6;
+}
+
+.half-gauge text {
+  font-size: 13px;
+  font-weight: 700;
+  fill: #1c2430;
+}
+
+.tone-pill {
+  display: inline-block;
+  margin-top: 8px;
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-style: normal;
+  font-size: 12px;
+}
+
+.tone-warning,
+.tone-pending-check {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.tone-critical {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.tone-good,
+.tone-complete {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.tone-planned,
+.tone-scheduled {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.denial-chart,
+.aging-chart,
+.milestone-track {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.denial-chart div,
+.aging-chart div {
+  flex: 1;
+  text-align: center;
+}
+
+.denial-chart span {
+  display: block;
+  margin: 0 auto 6px;
+  width: 18px;
+  border-radius: 6px 6px 0 0;
+  background: #60a5fa;
+}
+
+.denial-chart small,
+.aging-chart small {
+  display: block;
+  color: #667085;
+  font-size: 11px;
+}
+
+.aging-bars {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 4px;
+  height: 80px;
+}
+
+.aging-bars span {
+  width: 12px;
+  border-radius: 4px 4px 0 0;
+  background: #93c5fd;
+}
+
+.aging-bars span:last-child {
+  background: #cbd5e1;
+}
+
+.aging-legend i {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  margin: 0 6px 0 4px;
+  border-radius: 2px;
+  background: #93c5fd;
+}
+
+.milestone-card {
+  margin-top: 16px;
+}
+
+.milestone-track {
+  list-style: none;
+  margin: 20px 0 0;
+  padding: 0;
+  align-items: stretch;
+}
+
+.milestone-track li {
+  flex: 1;
+  background: #f8fafc;
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.milestone-track strong,
+.milestone-track span {
+  display: block;
+}
+
+.milestone-track span {
+  color: #667085;
+  font-size: 12px;
+  margin: 4px 0 8px;
+}
+
+@media (max-width: 980px) {
+  .dashboard-grid,
+  .stat-row {
+    grid-template-columns: 1fr;
+  }
+
+  .top-bar,
+  .title-row,
+  .facility-line {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "overview"
+      "doctors"
+      "appointments"
+      "recovery"
+      "shift"
+      "flow"
+      "assistant";
+  }
+
+  .revenue-metrics,
+  .revenue-charts,
+  .milestone-track {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
+}
