@@ -1,7 +1,17 @@
-// WHAT — The healthcare dashboard screen.
-// WHY — This is the home page people see at http://localhost:5173/.
-// HOW — It lays out the nursing cards, then the revenue-cycle cards. The numbers are sample data in this file.
-// IMPORTANT — These numbers are not from the API yet. The assistant box does not answer medical questions.
+// WHAT — The app shell and the list of web addresses the dashboard understands.
+// WHY — This file decides which screen shows for each address, and holds the home dashboard itself.
+// HOW — BrowserRouter maps "/" to the dashboard, "/patients" to the patient list, "/patients/:patientId" to one patient, and anything else to a not-found message.
+// IMPORTANT — The dashboard numbers below are sample data in this file, not live API data. The assistant box does not answer medical questions.
+
+import { useState } from "react"
+import { BrowserRouter, Link, NavLink, Route, Routes } from "react-router-dom"
+
+import { PatientDetail, PatientList } from "./PatientList.jsx"
+
+const sidebarLinks = [
+  { label: "Dashboard", address: "/", symbol: "◫", isExactMatch: true },
+  { label: "Patients", address: "/patients", symbol: "☺", isExactMatch: false },
+]
 
 const doctors = [
   { name: "Dr. Olivia Bennett", specialty: "Cardiologist", status: "On Duty" },
@@ -71,34 +81,9 @@ function HalfGauge({ fill, value }) {
   )
 }
 
-function App() {
+function DashboardHome() {
   return (
-    <div className="dashboard-page">
-      <header className="top-bar">
-        <div className="user-chip">
-          <button className="plus-button" type="button" aria-label="Add">
-            +
-          </button>
-          <span className="user-name">Elisa Nilson</span>
-        </div>
-
-        <nav className="section-nav" aria-label="Dashboard sections">
-          <button className="section-nav-item is-selected" type="button">Dashboard</button>
-          <button className="section-nav-item" type="button">Patients</button>
-          <button className="section-nav-item" type="button">Doctors</button>
-          <button className="section-nav-item" type="button">Schedules</button>
-        </nav>
-
-        <div className="top-actions">
-          <button className="icon-button" type="button" aria-label="Notifications">
-            <span className="bell-dot" />
-          </button>
-          <button className="icon-button" type="button" aria-label="Menu">
-            <span className="menu-lines" />
-          </button>
-        </div>
-      </header>
-
+    <>
       <section className="title-row">
         <div>
           <h1>HealthCare DashBoard</h1>
@@ -311,7 +296,79 @@ function App() {
           </ol>
         </article>
       </section>
-    </div>
+    </>
+  )
+}
+
+function PageNotFound() {
+  return (
+    <section className="message-panel">
+      <h1>Page not found</h1>
+      <p>That address does not exist in this dashboard.</p>
+      <Link className="text-button" to="/">Back to the dashboard</Link>
+    </section>
+  )
+}
+
+function App() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+
+  return (
+    <BrowserRouter>
+      <div className={`app-shell${isSidebarOpen ? "" : " sidebar-is-collapsed"}`}>
+        <aside className="app-sidebar">
+          <p className="sidebar-brand">
+            <span className="sidebar-symbol" aria-hidden="true">+</span>
+            <span className="sidebar-label">St. Mary&apos;s</span>
+          </p>
+          <nav className="sidebar-nav" aria-label="Dashboard sections">
+            {sidebarLinks.map((sidebarLink) => (
+              <NavLink
+                className="sidebar-link"
+                key={sidebarLink.address}
+                to={sidebarLink.address}
+                end={sidebarLink.isExactMatch}
+                title={sidebarLink.label}
+                aria-label={sidebarLink.label}
+              >
+                <span className="sidebar-symbol" aria-hidden="true">{sidebarLink.symbol}</span>
+                <span className="sidebar-label">{sidebarLink.label}</span>
+              </NavLink>
+            ))}
+          </nav>
+        </aside>
+
+        <div className="dashboard-page">
+          <header className="top-bar">
+            <div className="user-chip">
+              <button
+                className="plus-button"
+                type="button"
+                aria-label={isSidebarOpen ? "Collapse the sidebar" : "Expand the sidebar"}
+                aria-expanded={isSidebarOpen}
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              >
+                ☰
+              </button>
+              <span className="user-name">Elisa Nilson</span>
+            </div>
+
+            <div className="top-actions">
+              <button className="icon-button" type="button" aria-label="Notifications">
+                <span className="bell-dot" />
+              </button>
+            </div>
+          </header>
+
+          <Routes>
+            <Route path="/" element={<DashboardHome />} />
+            <Route path="/patients" element={<PatientList />} />
+            <Route path="/patients/:patientId" element={<PatientDetail />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </div>
+      </div>
+    </BrowserRouter>
   )
 }
 

@@ -71,41 +71,63 @@ Then open `http://127.0.0.1:4020/health`.
 
 The old `src/fastapi` folder was removed again. A local folder named `fastapi` would hide the real FastAPI library.
 
-## Next
+### Step 4 — Supabase Postgres and patient seed
 
-### Step 4 — Supabase Postgres
+Done for patients. Notes are still later.
 
-Connection file is in place. Tables and seed data are not.
+`config/database.py` connects to Supabase. On startup, `main.py` creates the `patients` table and, when it is empty, inserts 20 fictional patients from `models/patient.py`. A later restart does not insert them again.
 
-`config/database.py` reads `.env` and opens an async SQLAlchemy session to Supabase. `main.py` runs `SELECT 1` on startup. If that fails, the server stops.
+The log line to look for is `Seeded 20 fictional patients`. If the rows were already there, the log says the seed was skipped.
 
-Copy `.env.example` to `.env` and fill in the pooler settings from the Supabase dashboard (Project Settings → Database). Do not commit `.env`.
+### Step 5 — Patient routes
 
-Still to do: patient and note tables in `models/`, create them on startup, and seed 20 fictional patients.
+Done. All five live in `routes/patients.py`, and `main.py` only attaches the router.
+
+| Method and URL | Answers |
+| --- | --- |
+| `GET /patients` | A page of patients. Accepts `page`, `page_size`, `search`, `status`, `sort_by`, `sort_dir`. |
+| `GET /patients/{patient_id}` | One patient, or 404. |
+| `POST /patients` | 201 with the saved patient, or 422. |
+| `PUT /patients/{patient_id}` | The updated patient, or 404. |
+| `DELETE /patients/{patient_id}` | 204 with no body, or 404. |
+
+Notes from building it:
+
+- Age is never stored. `calculate_age_in_years` works it out from `date_of_birth`, so the browser cannot send a wrong age.
+- Sorting by age flips the date order, because an older patient has an earlier date of birth.
+- `sort_by`, `sort_dir`, `status`, and `blood_type` are fixed lists. Anything else is a 422 before the query runs.
+- A birth date or a last visit in the future is rejected.
+- `database_session` used to log a stack trace for every 404 and 422. It now logs only real `SQLAlchemyError` failures, so the log shows database problems instead of normal rejected input.
+
+Checked against the live Supabase data: the list returned all 20, a name search narrowed it to 1, the status filter returned the 4 critical patients, a created patient came back as 201 and was then deleted with 204, and the table was back to 20 rows afterwards.
+
+### Step 6 — Frontend routes, sidebar, and patient screens
+
+Done. Two screens were added with one new file, `FRONTEND/VITE/dashboard/src/PatientList.jsx`.
+
+- `App.jsx` now holds the addresses: `/` is the dashboard, `/patients` is the list, `/patients/:patientId` is one patient, and anything else shows "Page not found".
+- The nav moved into a collapsible sidebar. The button in the top bar collapses it to symbols only. A screen narrower than 980px collapses it on its own.
+- The list reads `GET /patients` with search, status, sort, and page buttons. Typing waits 300ms so one name does not send one request per key.
+- Loading, empty, and network-error states are all shown. During an error the table, the page buttons, and the total count are hidden, so a failed request never looks like a result.
+- The detail screen shows "Patient not available" for a missing id and for an id that is not a number.
 
 ## Later
 
 These stay "not started" until we reach them. Add notes under each one when we do the work.
 
-### Step 5 — Patient routes
-
-Not started.
-
-Add list, get, create, update, and delete. Validate every input with Pydantic. Use 201, 204, 404, and 422.
-
-### Step 6 — Notes and summary
+### Step 7 — Notes and summary
 
 Not started.
 
 Add create, list, and delete for notes. Add `GET /patients/{id}/summary` as a chart summary template.
 
-### Step 7 — Frontend
+### Step 8 — Add and edit patient form
 
 Not started.
 
-Create the Vite React app in `FRONTEND/VITE` with npm. Then build the layout, list, detail, form, and 404 page.
+The API already accepts `POST` and `PUT`. The screen for them is still to build.
 
-### Step 8 — Docker and README
+### Step 9 — Docker and README
 
 Not started.
 

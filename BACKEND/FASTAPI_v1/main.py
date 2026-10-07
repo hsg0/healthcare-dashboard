@@ -1,6 +1,6 @@
 # WHAT — Starts the API and answers the health check.
 # WHY — This is the file we run. The other folders plug in here.
-# HOW — FastAPI serves GET /health. On startup it checks the Supabase connection. Running this file starts Uvicorn on port 4020.
+# HOW — FastAPI serves GET /health. On startup it checks Supabase, creates the patients table, and seeds 20 fictional patients when that table is empty. Running this file starts Uvicorn on port 4020.
 # IMPORTANT — Patient rules do not belong here. They go in routes, controllers, and models. If .env is missing, startup stops on purpose.
 
 import logging
@@ -11,7 +11,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 
-from config.database import engine
+from config.database import DatabaseBase, engine
+from models.patient import seed_patients_if_empty
+from routes.patients import patient_router
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -19,9 +21,15 @@ logger = logging.getLogger("uvicorn.error")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
-        async with engine.connect() as connection:
+        async with engine.begin() as connection:
             await connection.execute(text("SELECT 1"))
+            await connection.run_sync(DatabaseBase.metadata.create_all)
         logger.info("Supabase database connection succeeded")
+        inserted_count = await seed_patients_if_empty()
+        if inserted_count:
+            logger.info("Seeded %s fictional patients", inserted_count)
+        else:
+            logger.info("Patient seed skipped because rows already exist")
     except Exception:
         logger.exception("Supabase database connection failed")
         raise
@@ -47,6 +55,9 @@ app.add_middleware(
 @app.get("/health")
 def health_check() -> dict[str, str]:
     return {"status": "ok"}
+
+
+app.include_router(patient_router)
 
 
 if __name__ == "__main__":

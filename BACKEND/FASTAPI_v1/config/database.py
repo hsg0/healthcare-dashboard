@@ -10,6 +10,7 @@ from pathlib import Path
 from urllib.parse import quote_plus
 
 from dotenv import load_dotenv
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
@@ -82,7 +83,11 @@ async def database_session() -> AsyncIterator[AsyncSession]:
     async with SessionLocal() as session:
         try:
             yield session
-        except Exception:
+        except SQLAlchemyError:
+            # Only a real database problem is worth a stack trace. A 404 or a 422 is not.
             logger.exception("Database session failed and was rolled back")
+            await session.rollback()
+            raise
+        except Exception:
             await session.rollback()
             raise
